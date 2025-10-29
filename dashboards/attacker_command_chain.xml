@@ -1,0 +1,35 @@
+<form version="1.1" theme="dark">
+  <label>Attacker Emulation Panel</label>
+  <description></description>
+  <fieldset submitButton="false">
+    <input type="dropdown" token="host">
+      <label>host</label>
+      <search>
+        <query>index=attacker_emulation sourcetype=auditd host=$host$ auid=$auid$ ses=$ses$
+| `reconstruct_command_chain`
+| table _time, host, exe, comm, pid, auid, ses, command_chain</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Attacker Command Chains</title>
+        <search>
+          <query>index=attacker_emulation sourcetype=auditd
+| `reconstruct_command_chain`
+| table _time, host, exe, comm, pid, auid, ses, command_chain</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <format type="color" field="exe">
+          <colorPalette type="minMidMax" maxColor="#118832" minColor="#FFFFFF"></colorPalette>
+          <scale type="minMidMax"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>
