@@ -1,0 +1,11 @@
+# Monitor all execve calls (general coverage)
+-a always,exit -F arch=b64 -S execve -F key=all_exec
+
+# Targeted execve monitoring for specific binaries
+-a always,exit -F arch=b64 -S execve -F exe=/usr/sbin/sshd -F key=sshd_exec
+-a always,exit -F arch=b64 -S execve -F exe=/usr/bin/curl -F key=curl_exec
+-a always,exit -F arch=b64 -S execve -F exe=/usr/sbin/auditctl -F key=auditctl_exec
+-a always,exit -F arch=b64 -S execve -F exe=/usr/bin/bash -F key=bash_exec
+
+# Watch for execution permission changes on sshd binary
+-w /usr/sbin/sshd -p x -k sshd_exec
